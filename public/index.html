@@ -10,57 +10,273 @@
 
 <body>
 
+  <!-- Preloader -->
+  <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; transition: opacity 0.8s ease-out;">
+    <img src="assets/hydrofarm-logo.png" alt="Hydro Farm Logo" style="height: 120px; margin-bottom: 30px;">
+    <div style="font-size: 48px; font-weight: 300; letter-spacing: 2px;">
+      <span id="loading-progress">1</span>
+    </div>
+  </div>
+
   <!-- Navigation -->
-  <nav class="navbar">
-    <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-      <a href="#" class="nav-brand"
-        style="margin-left: -100px; margin-top: -30px; background-color: rgba(249, 249, 248, 0.9); padding: 40px 20px 10px 20px; border-radius: 0 0 12px 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <img src="assets/hydrofarm-logo.png" alt="Hydro Farm Logo" style="height: 135px; display: block;">
-      </a>
-      <ul class="nav-links">
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Our Team</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Our Clients</a></li>
-        <li><a href="#">Gallery</a></li>
-        <li><a href="#">Contact</a></li>
+  <nav id="navbar" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: transparent; box-sizing: border-box; font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    
+    <!-- Logo -->
+    <a href="#" style="display: block; flex: 1;">
+      <img src="assets/hydrofarm-logo.png" alt="Hydro Farm Logo" style="height: 110px; filter: drop-shadow(0 2px 15px rgba(255, 255, 255, 0.8));">
+    </a>
+
+    <!-- Pill Container for Links -->
+    <div style="flex: 2; display: flex; justify-content: center;">
+      <ul style="display: flex; list-style: none; gap: 35px; margin: 0; padding: 14px 40px; background: rgba(232, 240, 216, 0.35); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(140, 168, 85, 0.3); border-radius: 50px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);">
+        <li><a href="#" style="color: #111; text-decoration: none; font-weight: 500; font-size: 15px; letter-spacing: 0.2px;">About Us</a></li>
+        <li><a href="#" style="color: #111; text-decoration: none; font-weight: 500; font-size: 15px; letter-spacing: 0.2px;">Our Team</a></li>
+        <li><a href="#" style="color: #111; text-decoration: none; font-weight: 500; font-size: 15px; letter-spacing: 0.2px;">Services</a></li>
+        <li><a href="#" style="color: #111; text-decoration: none; font-weight: 500; font-size: 15px; letter-spacing: 0.2px;">Our Clients</a></li>
+        <li><a href="#" style="color: #111; text-decoration: none; font-weight: 500; font-size: 15px; letter-spacing: 0.2px;">Gallery</a></li>
+        <li><a href="#" style="color: #111; text-decoration: none; font-weight: 500; font-size: 15px; letter-spacing: 0.2px;">Contact</a></li>
       </ul>
-      <div class="nav-actions">
-        <button class="lang-btn"
-          style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500; transition: all 0.3s; opacity: 0.9;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-          </svg>
-          EN / AR
-        </button>
+    </div>
+
+    <!-- Right Actions -->
+    <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 24px;">
+      <div style="color: white; font-weight: 500; font-size: 15px; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+        EN / AR
       </div>
+      <a href="#" style="background: #000; color: #fff; text-decoration: none; padding: 14px 30px; border-radius: 50px; font-weight: 500; font-size: 15px; display: inline-block;">
+        Contact Us
+      </a>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
+  <section id="hero-scroll-container" style="height: 300vh; position: relative;">
+    <div id="hero-sticky" style="position: sticky; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; background: #000;">
+      
+      <!-- Desktop Canvas -->
+      <canvas id="hero-canvas" style="width: 100%; height: 100%; object-fit: cover; display: block;"></canvas>
 
-    <div class="container fade-in">
-      <div class="hero-content">
-        <h1 class="hero-title">Smart solutions for<br>Sustainable future</h1>
-        <p class="hero-desc">We lead industrial and desert greening initiatives with a focus on long-term impact and
-          smart digital integration.<br><br>Integrated Agribusiness | Plantation Development | Environmental Management
-        </p>
-        <div class="hero-buttons">
-          <a href="#" class="btn btn-outline-white">Explore</a>
-          <a href="#" class="btn btn-white">Contact Us</a>
-        </div>
+      <!-- Overlay Effects -->
+      <div id="hero-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; transition: background 0.1s, box-shadow 0.1s;"></div>
+
+      <!-- Mobile Fallback -->
+      <div id="mobile-fallback" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+        <img id="mobile-img-1" src="/frames/ezgif-frame-001.png" style="position: absolute; width: 100%; height: 100%; object-fit: cover; animation: kenburns 10s ease-out forwards; opacity: 1; transition: opacity 2s ease-in-out;">
+        <img id="mobile-img-2" src="/frames/ezgif-frame-065.png" style="position: absolute; width: 100%; height: 100%; object-fit: cover; animation: kenburns 10s ease-out forwards; opacity: 0; transition: opacity 2s ease-in-out;">
       </div>
-    </div>
 
-    <div class="hero-slider-indicator">
-      <div class="slider-line"></div>
-      <span>1/3</span>
+      <style>
+        @keyframes kenburns {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.1); }
+        }
+        @media (max-width: 768px) {
+          #hero-canvas { display: none !important; }
+          #mobile-fallback { display: block !important; }
+        }
+        .scrolled-nav {
+          /* No background color on outer header per redesign */
+        }
+        @media (max-width: 768px) {
+          #navbar ul { display: none; }
+        }
+      </style>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const isMobile = window.innerWidth <= 768;
+          const preloader = document.getElementById("preloader");
+          const progressText = document.getElementById("loading-progress");
+          const navbar = document.getElementById("navbar");
+          
+          // Navbar scroll effect
+          window.addEventListener("scroll", () => {
+            if (window.scrollY > 50) {
+              navbar.classList.add("scrolled-nav");
+            } else {
+              navbar.classList.remove("scrolled-nav");
+            }
+          });
+
+          // Eased Counter Logic
+          let isCounterDone = false;
+          let startTime = null;
+          const counterDuration = 3500; // 3.5 seconds
+          const easeInOutCubic = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+
+          const updateCounter = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / counterDuration, 1);
+            const easedProgress = easeInOutCubic(progress);
+            const currentCount = Math.floor(1 + (easedProgress * 99));
+            
+            progressText.innerText = currentCount;
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            } else {
+              progressText.innerText = 100;
+              isCounterDone = true;
+              if (window.checkStartAnimation) window.checkStartAnimation();
+            }
+          };
+          requestAnimationFrame(updateCounter);
+
+          if (isMobile) {
+            // Mobile fallback logic
+            let loaded = 0;
+            let areMobileImagesLoaded = false;
+            const mobileImg1 = document.getElementById("mobile-img-1");
+            const mobileImg2 = document.getElementById("mobile-img-2");
+            
+            window.checkStartAnimation = () => {
+              if (areMobileImagesLoaded && isCounterDone) {
+                preloader.style.opacity = "0";
+                setTimeout(() => preloader.style.display = "none", 800);
+                setTimeout(() => {
+                  mobileImg1.style.opacity = "0";
+                  mobileImg2.style.opacity = "1";
+                }, 3000);
+              }
+            };
+
+            const checkMobileLoad = () => {
+              loaded++;
+              if (loaded === 2) {
+                areMobileImagesLoaded = true;
+                if (window.checkStartAnimation) window.checkStartAnimation();
+              }
+            };
+
+            if (mobileImg1.complete) checkMobileLoad(); else mobileImg1.onload = checkMobileLoad;
+            if (mobileImg2.complete) checkMobileLoad(); else mobileImg2.onload = checkMobileLoad;
+            return;
+          }
+
+          // Desktop Canvas Logic
+          const canvas = document.getElementById("hero-canvas");
+          const ctx = canvas.getContext("2d", { alpha: false });
+          const overlay = document.getElementById("hero-overlay");
+          const scrollContainer = document.getElementById("hero-scroll-container");
+          
+          const totalFrames = 65;
+          const frames = [];
+          let areFramesLoaded = false;
+          
+          // Resize canvas
+          const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (frames[Math.round(currentFrameIndex)]) render(currentFrameIndex);
+          };
+          window.addEventListener("resize", resize);
+
+          window.checkStartAnimation = () => {
+            if (areFramesLoaded && isCounterDone) {
+              initAnimation();
+            }
+          };
+
+          // Batch preloading
+          const batchSize = 10;
+
+          const loadBatch = (batchIndex) => {
+            const start = batchIndex * batchSize + 1;
+            const end = Math.min((batchIndex + 1) * batchSize, totalFrames);
+            let loadedInBatch = 0;
+
+            for (let i = start; i <= end; i++) {
+              const img = new Image();
+              img.src = `/frames/ezgif-frame-${String(i).padStart(3, '0')}.png`;
+              
+              img.onload = async () => {
+                try {
+                  if (img.decode) await img.decode();
+                } catch (e) {}
+                
+                frames[i] = img;
+                loadedInBatch++;
+                
+                if (loadedInBatch === (end - start + 1)) {
+                  if (end < totalFrames) {
+                    loadBatch(batchIndex + 1);
+                  } else {
+                    areFramesLoaded = true;
+                    if (window.checkStartAnimation) window.checkStartAnimation();
+                  }
+                }
+              };
+            }
+          };
+
+          loadBatch(0);
+
+          let currentFrameIndex = 1;
+          let targetFrameIndex = 1;
+          
+          const render = (index) => {
+            if (!frames[Math.round(index)]) return;
+            const img = frames[Math.round(index)];
+            
+            // Object-fit cover logic
+            const canvasRatio = canvas.width / canvas.height;
+            const imgRatio = img.width / img.height;
+            let drawWidth = canvas.width;
+            let drawHeight = canvas.height;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            if (canvasRatio > imgRatio) {
+              drawHeight = canvas.width / imgRatio;
+              offsetY = (canvas.height - drawHeight) / 2;
+            } else {
+              drawWidth = canvas.height * imgRatio;
+              offsetX = (canvas.width - drawWidth) / 2;
+            }
+
+            ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+
+            // Overlay Effects
+            const idx = Math.round(index);
+            let boxShadow = "";
+            let bgColor = "rgba(0,0,0,0)";
+
+            if (idx >= 1 && idx <= 15) {
+              const opacity = 1 - (idx / 15);
+              boxShadow = `inset 0 0 100px rgba(0,0,0,${opacity * 0.8})`;
+            } else if (idx >= 25 && idx <= 35) {
+              const progress = 1 - Math.abs(idx - 30) / 5; 
+              bgColor = `rgba(0,0,0,${progress * 0.4})`;
+            }
+            
+            overlay.style.boxShadow = boxShadow;
+            overlay.style.background = bgColor;
+          };
+
+          const initAnimation = () => {
+            preloader.style.opacity = "0";
+            setTimeout(() => preloader.style.display = "none", 500);
+            
+            resize();
+
+            const lerp = (start, end, factor) => start + (end - start) * factor;
+
+            const loop = () => {
+              const rect = scrollContainer.getBoundingClientRect();
+              const scrollProgress = -rect.top / (rect.height - window.innerHeight);
+              const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
+              
+              targetFrameIndex = 1 + clampedProgress * (totalFrames - 1);
+              currentFrameIndex = lerp(currentFrameIndex, targetFrameIndex, 0.08);
+
+              render(currentFrameIndex);
+              requestAnimationFrame(loop);
+            };
+
+            requestAnimationFrame(loop);
+          };
+        });
+      </script>
     </div>
   </section>
 
