@@ -92,7 +92,7 @@
   </script>
 
   <!-- Hero Section -->
-  <section id="hero-scroll-container" style="height: 800vh; position: relative;">
+  <section id="hero-scroll-container" style="height: 800vh; position: relative; display: none;">
     <div id="hero-sticky" style="position: sticky; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; background: #000;">
       
       <!-- Desktop Canvas -->
@@ -120,230 +120,176 @@
       <script>
       <script>
         document.addEventListener("DOMContentLoaded", () => {
-          const isMobile = window.innerWidth <= 768;
-          const preloader = document.getElementById("preloader");
-          const progressText = document.getElementById("loading-progress");
-          const navbar = document.getElementById("navbar");
-          
-          if (isMobile) {
-            navbar.classList.add("nav-hidden");
+          // COUNTER — RUNS ON ITS OWN INDEPENDENT TIMER
+          let count = 0;
+          const counterEl = document.getElementById('loading-progress');
+          const interval = setInterval(() => {
+            count++;
+            counterEl.textContent = count;
+            if (count >= 100) {
+              clearInterval(interval);
+              setTimeout(hidePreloader, 500);
+            }
+          }, 30);
+
+          function hidePreloader() {
+            const preloader = document.getElementById('preloader');
+            preloader.style.transition = 'opacity 0.6s ease';
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+              preloader.style.display = 'none';
+              startScrollAnimation();
+            }, 600);
           }
-          
-          const totalFrames = 250;
-          const preloadedFramesCount = 30;
-          const frames = [];
-          let animationStarted = false;
 
-          let isCounterDone = false;
-          let startTime = null;
-          const counterDuration = 3000;
-          const easeInOutCubic = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-
-          const checkReady = () => {
-            if (!isCounterDone) return;
-            if (frames[0] && frames[0] !== 'loading') {
-              initAnimation();
-            } else {
-              setTimeout(() => {
-                if (!animationStarted) initAnimation();
-              }, 2000);
-            }
-          };
-
-          const updateCounter = (timestamp) => {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / counterDuration, 1);
-            const easedProgress = easeInOutCubic(progress);
-            const currentCount = Math.floor(1 + (easedProgress * 99));
-            
-            progressText.innerText = currentCount;
-
-            if (progress < 1) {
-              requestAnimationFrame(updateCounter);
-            } else {
-              progressText.innerText = 100;
-              isCounterDone = true;
-              checkReady();
-            }
-          };
-          requestAnimationFrame(updateCounter);
-
-          const canvas = document.getElementById("hero-canvas");
-          const ctx = canvas.getContext("2d", { alpha: false });
-          const overlay = document.getElementById("hero-overlay");
-          
-          const resize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            if (frames[Math.floor(currentFrame)]) drawFrame(currentFrame);
-          };
-          window.addEventListener("resize", resize);
-          window.addEventListener("orientationchange", resize);
-
-          const loadInitialFrames = () => {
-            let loadedCount = 0;
-            for (let i = 0; i < preloadedFramesCount; i++) {
-              const img = new Image();
-              img.src = `/frames/ezgif-frame-${String(i + 1).padStart(3, '0')}.webp`;
-              img.onload = async () => {
-                try { if (img.decode) await img.decode(); } catch (e) {}
-                frames[i] = img;
-                loadedCount++;
-                if (i === 0 && !animationStarted) {
-                   resize();
-                   drawFrame(0);
-                   checkReady();
-                }
-              };
-              img.onerror = () => {
-                frames[i] = frames[Math.max(0, i-1)] || frames[0];
-                loadedCount++;
-                if (i === 0) checkReady();
-              };
-            }
-          };
-          loadInitialFrames();
-
-          let highestRequestedFrame = preloadedFramesCount - 1;
-          const requestFramesAhead = 20;
-
-          const loadFrameLazy = (i) => {
-            if (i >= totalFrames || frames[i]) return;
-            frames[i] = 'loading';
-            const img = new Image();
-            img.src = `/frames/ezgif-frame-${String(i + 1).padStart(3, '0')}.webp`;
-            img.onload = async () => {
-              try { if (img.decode) await img.decode(); } catch (e) {}
-              frames[i] = img;
-            };
-            img.onerror = () => {
-              frames[i] = frames[Math.max(0, i-1)];
-            };
-          };
-
-          const checkLazyLoad = (currentIndex) => {
-            const targetLoad = Math.min(Math.floor(currentIndex) + requestFramesAhead, totalFrames - 1);
-            if (targetLoad > highestRequestedFrame) {
-              for (let i = highestRequestedFrame + 1; i <= targetLoad; i++) {
-                loadFrameLazy(i);
-              }
-              highestRequestedFrame = targetLoad;
-            }
-          };
-
+          // FRAME LOADING — COMPLETELY SEPARATE
+          const frames = new Array(250);
+          let loadedFrames = 0;
           let currentFrame = 0;
           let targetFrame = 0;
 
-          window.addEventListener('scroll', () => {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const maxScroll = document.body.scrollHeight - window.innerHeight;
-            const progress = scrollTop / maxScroll;
-            const frameIndex = Math.min(Math.floor(progress * 249), 249);
-            targetFrame = frameIndex;
+          function loadFrame(i) {
+            const img = new Image();
+            img.onload = () => { frames[i] = img; loadedFrames++; };
+            img.onerror = () => { frames[i] = frames[Math.max(0, i-1)] || null; loadedFrames++; };
+            img.src = '/frames/ezgif-frame-' + String(i+1).padStart(3, '0') + '.webp';
+          }
+
+          for (let i = 0; i < 30; i++) { loadFrame(i); }
+          setTimeout(() => { for (let i = 30; i < 250; i++) { loadFrame(i); } }, 3000);
+
+          // CANVAS SETUP
+          const canvas = document.getElementById('hero-canvas');
+          canvas.style.position = 'fixed';
+          canvas.style.top = '0';
+          canvas.style.left = '0';
+          canvas.style.width = '100vw';
+          canvas.style.height = '100vh';
+          canvas.style.zIndex = '1';
+          canvas.style.opacity = '0';
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+          });
+
+          // START SCROLL ANIMATION
+          function startScrollAnimation() {
+            document.getElementById('hero-scroll-container').style.display = 'block';
+            canvas.style.opacity = '1';
             
-            if (scrollTop > 50) {
-              navbar.classList.add("scrolled-nav");
-            } else {
-              navbar.classList.remove("scrolled-nav");
-            }
-          }, { passive: true });
-
-          window.addEventListener("wheel", (e) => {
-            targetFrame += e.deltaY * 0.05;
-            targetFrame = Math.max(0, Math.min(249, targetFrame));
-          }, { passive: true });
-
-          let touchStartY = 0;
-          window.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-          }, { passive: false });
-
-          window.addEventListener('touchmove', (e) => {
-            if (targetFrame >= 249) return;
-            e.preventDefault();
-            const currentY = e.touches[0].clientY;
-            const delta = (touchStartY - currentY) * 2.0;
-            touchStartY = currentY;
-            targetFrame += delta * 0.05;
-            targetFrame = Math.max(0, Math.min(249, targetFrame));
-          }, { passive: false });
-
-
-          const drawFrame = (index) => {
-            const idx = Math.floor(index);
-            const img = frames[idx];
-            if (!img || img === 'loading') return;
-            
-            if (idx >= 249) {
-               canvas.style.position = 'absolute';
-               overlay.style.position = 'absolute';
-            } else {
-               canvas.style.position = 'fixed';
-               overlay.style.position = 'fixed';
-            }
-            
-            const canvasRatio = canvas.width / canvas.height;
-            const imgRatio = img.width / img.height;
-            let drawWidth = canvas.width;
-            let drawHeight = canvas.height;
-            let offsetX = 0;
-            let offsetY = 0;
-
-            if (canvasRatio > imgRatio) {
-              drawHeight = canvas.width / imgRatio;
-              offsetY = (canvas.height - drawHeight) / 2;
-            } else {
-              drawWidth = canvas.height * imgRatio;
-              offsetX = (canvas.width - drawWidth) / 2;
-            }
-
-            ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-
-            let boxShadow = "";
-            let bgColor = "rgba(0,0,0,0)";
-
-            if (idx >= 0 && idx <= 14) {
-              const opacity = 1 - (idx / 14);
-              boxShadow = `inset 0 0 100px rgba(0,0,0,${opacity * 0.8})`;
-            } else if (idx >= 24 && idx <= 34) {
-              const progress = 1 - Math.abs(idx - 29) / 5; 
-              bgColor = `rgba(0,0,0,${progress * 0.4})`;
-            }
-            
-            overlay.style.boxShadow = boxShadow;
-            overlay.style.background = bgColor;
-            
-            checkLazyLoad(index);
-          };
-
-          const initAnimation = () => {
-            if (animationStarted) return;
-            animationStarted = true;
-            preloader.style.transition = "opacity 500ms ease-out";
-            preloader.style.opacity = "0";
-            canvas.style.opacity = "1";
-            setTimeout(() => preloader.style.display = "none", 500);
-            
+            const isMobile = window.innerWidth <= 768;
+            const navbar = document.getElementById("navbar");
             if (isMobile) {
               navbar.classList.remove("nav-hidden");
             }
             
-            resize();
-          };
-          
-          function animate() {
-            if (animationStarted) {
-              if (Math.abs(currentFrame - targetFrame) > 0.05) {
-                currentFrame += (targetFrame - currentFrame) * 0.06;
-                drawFrame(currentFrame);
-              } else {
-                currentFrame = targetFrame;
-                drawFrame(currentFrame);
-              }
-            }
-            requestAnimationFrame(animate);
+            startAnimationLoop();
           }
-          animate();
+
+          // ANIMATION LOOP
+          let animRunning = false;
+          function startAnimationLoop() {
+            if (animRunning) return;
+            animRunning = true;
+            function loop() {
+              currentFrame += (targetFrame - currentFrame) * 0.06;
+              const idx = Math.min(Math.floor(currentFrame), 249);
+              if (frames[idx]) {
+                const ctx = canvas.getContext('2d');
+                
+                // Object-fit cover (kept to match previous setup and prevent distortion)
+                const img = frames[idx];
+                const canvasRatio = canvas.width / canvas.height;
+                const imgRatio = img.width / img.height;
+                let drawWidth = canvas.width;
+                let drawHeight = canvas.height;
+                let offsetX = 0;
+                let offsetY = 0;
+
+                if (canvasRatio > imgRatio) {
+                  drawHeight = canvas.width / imgRatio;
+                  offsetY = (canvas.height - drawHeight) / 2;
+                } else {
+                  drawWidth = canvas.height * imgRatio;
+                  offsetX = (canvas.width - drawWidth) / 2;
+                }
+
+                ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+
+                // Overlay Effects
+                const overlay = document.getElementById("hero-overlay");
+                if (overlay) {
+                  let boxShadow = "";
+                  let bgColor = "rgba(0,0,0,0)";
+                  if (idx >= 0 && idx <= 14) {
+                    const opacity = 1 - (idx / 14);
+                    boxShadow = `inset 0 0 100px rgba(0,0,0,${opacity * 0.8})`;
+                  } else if (idx >= 24 && idx <= 34) {
+                    const progress = 1 - Math.abs(idx - 29) / 5; 
+                    bgColor = `rgba(0,0,0,${progress * 0.4})`;
+                  }
+                  overlay.style.boxShadow = boxShadow;
+                  overlay.style.background = bgColor;
+                }
+                
+                // Fix canvas position based on scroll end
+                if (idx >= 249) {
+                   canvas.style.position = 'absolute';
+                   const overlay = document.getElementById("hero-overlay");
+                   if (overlay) overlay.style.position = 'absolute';
+                } else {
+                   canvas.style.position = 'fixed';
+                   const overlay = document.getElementById("hero-overlay");
+                   if (overlay) overlay.style.position = 'fixed';
+                }
+              }
+              requestAnimationFrame(loop);
+            }
+            loop();
+          }
+
+          // SCROLL DETECTION
+          window.addEventListener('scroll', () => {
+            const scrollContainer = document.getElementById('hero-scroll-container');
+            if (scrollContainer && scrollContainer.style.display !== 'none') {
+               const scrollTop = window.pageYOffset;
+               const maxScroll = scrollContainer.offsetHeight - window.innerHeight;
+               if (maxScroll > 0) {
+                 const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
+                 targetFrame = Math.floor(progress * 249);
+               }
+               
+               const navbar = document.getElementById("navbar");
+               if (scrollTop > 50) {
+                 navbar.classList.add("scrolled-nav");
+               } else {
+                 navbar.classList.remove("scrolled-nav");
+               }
+            }
+          }, { passive: true });
+
+          // MOBILE TOUCH
+          let touchStartY = 0;
+          canvas.addEventListener('touchstart', (e) => { 
+            touchStartY = e.touches[0].clientY; 
+          }, { passive: false });
+          
+          canvas.addEventListener('touchmove', (e) => {
+            if (targetFrame >= 249) return;
+            e.preventDefault();
+            const delta = (touchStartY - e.touches[0].clientY) * 2;
+            touchStartY = e.touches[0].clientY;
+            targetFrame = Math.min(Math.max(targetFrame + Math.floor(delta / 5), 0), 249);
+          }, { passive: false });
+          
+          window.addEventListener("wheel", (e) => {
+            if (document.getElementById('hero-scroll-container').style.display !== 'none') {
+              targetFrame += e.deltaY * 0.05;
+              targetFrame = Math.max(0, Math.min(249, targetFrame));
+            }
+          }, { passive: true });
         });
       </script>
     </div>
