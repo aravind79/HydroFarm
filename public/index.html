@@ -11,7 +11,7 @@
 <body>
 
   <!-- Preloader -->
-  <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; transition: opacity 0.8s ease-out;">
+  <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
     <img src="assets/hydrofarm-logo.png" alt="Hydro Farm Logo" style="height: 120px; margin-bottom: 30px;">
     <div style="font-size: 48px; font-weight: 300; letter-spacing: 2px;">
       <span id="loading-progress">1</span>
@@ -96,7 +96,7 @@
     <div id="hero-sticky" style="position: sticky; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; background: #000;">
       
       <!-- Desktop Canvas -->
-      <canvas id="hero-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; object-fit: cover; display: block;"></canvas>
+      <canvas id="hero-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; object-fit: cover; display: block; opacity: 0;"></canvas>
 
       <!-- Overlay Effects -->
       <div id="hero-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2; pointer-events: none; transition: background 0.1s, box-shadow 0.1s;"></div>
@@ -132,13 +132,23 @@
           const totalFrames = 250;
           const preloadedFramesCount = 30;
           const frames = [];
-          let areFramesLoaded = false;
           let animationStarted = false;
 
           let isCounterDone = false;
           let startTime = null;
-          const counterDuration = 3500;
+          const counterDuration = 3000;
           const easeInOutCubic = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+
+          const checkReady = () => {
+            if (!isCounterDone) return;
+            if (frames[0] && frames[0] !== 'loading') {
+              initAnimation();
+            } else {
+              setTimeout(() => {
+                if (!animationStarted) initAnimation();
+              }, 2000);
+            }
+          };
 
           const updateCounter = (timestamp) => {
             if (!startTime) startTime = timestamp;
@@ -153,8 +163,7 @@
             } else {
               progressText.innerText = 100;
               isCounterDone = true;
-              if (window.checkStartAnimation) window.checkStartAnimation();
-              setTimeout(() => { if (!animationStarted) initAnimation(); }, 3000);
+              checkReady();
             }
           };
           requestAnimationFrame(updateCounter);
@@ -183,19 +192,13 @@
                 if (i === 0 && !animationStarted) {
                    resize();
                    drawFrame(0);
-                }
-                if (loadedCount === preloadedFramesCount) {
-                  areFramesLoaded = true;
-                  if (window.checkStartAnimation) window.checkStartAnimation();
+                   checkReady();
                 }
               };
               img.onerror = () => {
-                frames[i] = frames[i-1] || frames[0];
+                frames[i] = frames[Math.max(0, i-1)] || frames[0];
                 loadedCount++;
-                if (loadedCount === preloadedFramesCount) {
-                  areFramesLoaded = true;
-                  if (window.checkStartAnimation) window.checkStartAnimation();
-                }
+                if (i === 0) checkReady();
               };
             }
           };
@@ -214,7 +217,7 @@
               frames[i] = img;
             };
             img.onerror = () => {
-              frames[i] = frames[i-1] || frames[0];
+              frames[i] = frames[Math.max(0, i-1)];
             };
           };
 
@@ -265,11 +268,6 @@
             targetFrame = Math.max(0, Math.min(249, targetFrame));
           }, { passive: false });
 
-          window.checkStartAnimation = () => {
-            if (areFramesLoaded && isCounterDone) {
-              initAnimation();
-            }
-          };
 
           const drawFrame = (index) => {
             const idx = Math.floor(index);
@@ -321,9 +319,10 @@
           const initAnimation = () => {
             if (animationStarted) return;
             animationStarted = true;
-            preloader.style.transition = "opacity 600ms ease-out";
+            preloader.style.transition = "opacity 500ms ease-out";
             preloader.style.opacity = "0";
-            setTimeout(() => preloader.style.display = "none", 600);
+            canvas.style.opacity = "1";
+            setTimeout(() => preloader.style.display = "none", 500);
             
             if (isMobile) {
               navbar.classList.remove("nav-hidden");
