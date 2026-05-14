@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- Navbar Scroll Effect ---
-  const navbar = document.querySelector('.navbar');
+  const navbar = document.querySelector('.navbar') || document.getElementById('navbar');
   window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
+    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 50);
   });
 
   // --- Parallax Hero Effect ---
