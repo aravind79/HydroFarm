@@ -464,13 +464,6 @@
           operating from Dammam and Al Khobar, we align our innovations with the Kingdom’s Vision 2030 and environmental
           sustainability goals.</p>
 
-        <div class="tp-controls">
-          <div class="tp-arrows">
-            <button class="arrow-btn">&lt;</button>
-            <button class="arrow-btn">&gt;</button>
-          </div>
-          <span style="font-size: 27px; font-weight: 500;">2/5</span>
-        </div>
       </div>
     </div>
   </section>
@@ -542,7 +535,7 @@
         <!-- Card 1 -->
         <div class="dash-card">
           <h4 class="card-title">TREE TAGGING</h4>
-          <p style="font-size: 19px; color: var(--text-light); margin-bottom: 30px; line-height: 1.5;">Digital
+          <p style="font-size: 16px; color: var(--text-light); margin-bottom: 20px; line-height: 1.5;">Digital
             identifiers record species type, planting date & Geo-coordinates for each tree.</p>
           <div
             style="background: #f9f9f9; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
@@ -563,17 +556,17 @@
         <!-- Card 2 -->
         <div class="dash-card">
           <h4 class="card-title">SATELLITE VEGETATION TRACKING</h4>
-          <p style="font-size: 19px; color: var(--text-light); margin-bottom: 30px; line-height: 1.5;">Real-time imagery
+          <p style="font-size: 16px; color: var(--text-light); margin-bottom: 20px; line-height: 1.5;">Real-time imagery
             for canopy coverage, vegetation health and spatial analytics.</p>
-          <div class="map-placeholder" style="height: 150px; border-radius: 8px;"></div>
+          <div class="map-placeholder" style="height: 120px; border-radius: 8px;"></div>
         </div>
 
         <!-- Card 3 -->
         <div class="dash-card" style="display: flex; flex-direction: column;">
           <h4 class="card-title">SENSOR ASSISTED DATA LOGGING</h4>
-          <p style="font-size: 19px; color: var(--text-light); margin-bottom: 20px; line-height: 1.5;">IoT-enabled
+          <p style="font-size: 16px; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">IoT-enabled
             sensors monitor moisture, nutrient levels and micro climatic variables.</p>
-          <div class="growth-bars" style="height: 100px; margin: auto 0 0 0;">
+          <div class="growth-bars" style="height: 80px; margin: auto 0 0 0;">
             <div class="bar" style="height: 40%"></div>
             <div class="bar" style="height: 60%"></div>
             <div class="bar" style="height: 50%"></div>
@@ -587,7 +580,7 @@
   </section>
 
   <!-- Soil & Plant Analysis -->
-  <section class="soil-analysis">
+  <section class="soil-analysis" id="soil-analysis-section">
     <div class="container">
       <div class="soil-content fade-in">
         <h2>Plantation & Desert Greening Projects</h2>
@@ -598,24 +591,33 @@
     </div>
 
     <div class="soil-subnav">
-      <div style="flex: 1; overflow: hidden;">
-        <ul class="subnav-links"
+      <div style="flex: 1; overflow: hidden; display: flex; align-items: center;">
+        <ul class="subnav-links" id="soil-subnav-links"
           style="overflow-x: auto; white-space: nowrap; padding-bottom: 20px; margin-bottom: -20px; scrollbar-width: none;">
-          <li class="active">Industrial Green Infrastructure</li>
-          <li>Landscaping & Vertical Gardens</li>
-          <li>Nurseries & Planting Supply</li>
-          <li>Vertical Farming & CEA</li>
-          <li>Agri-input Products</li>
-          <li>Bioengineering & Land Remediation</li>
-          <li>Ecological Restoration</li>
-          <li>ESG & Carbon Projects</li>
+          <li class="active" onclick="changeSoilImage(this, 'assets/hero_bg_1777629838865.png')">Industrial Green Infrastructure</li>
+          <li onclick="changeSoilImage(this, 'assets/Sustainable-low-carbon-Green-Road-infrastructure-and-landscapes.jpg')">Landscaping & Vertical Gardens</li>
+          <li onclick="changeSoilImage(this, 'assets/desert_trees_1777629893015.png')">Nurseries & Planting Supply</li>
+          <li onclick="changeSoilImage(this, 'assets/hero_bg_1777629838865.png')">Vertical Farming & CEA</li>
+          <li onclick="changeSoilImage(this, 'assets/Sustainable-low-carbon-Green-Road-infrastructure-and-landscapes.jpg')">Agri-input Products</li>
+          <li onclick="changeSoilImage(this, 'assets/desert_trees_1777629893015.png')">Bioengineering & Land Remediation</li>
+          <li onclick="changeSoilImage(this, 'assets/hero_bg_1777629838865.png')">Ecological Restoration</li>
+          <li onclick="changeSoilImage(this, 'assets/Sustainable-low-carbon-Green-Road-infrastructure-and-landscapes.jpg')">ESG & Carbon Projects</li>
         </ul>
       </div>
-      <div style="display: flex; gap: 15px; color: white; padding-left: 20px;">
-        <span style="cursor:pointer;">&lt;</span>
-        <span style="cursor:pointer;">&gt;</span>
+      <div style="display: flex; gap: 20px; color: white; padding-left: 20px; align-items: center; height: 100%;">
+        <span style="cursor:pointer; font-size: 20px;" onclick="document.getElementById('soil-subnav-links').scrollBy({left: -300, behavior: 'smooth'})">&lt;</span>
+        <span style="cursor:pointer; font-size: 20px;" onclick="document.getElementById('soil-subnav-links').scrollBy({left: 300, behavior: 'smooth'})">&gt;</span>
       </div>
     </div>
+    
+    <script>
+      function changeSoilImage(element, imageUrl) {
+        document.getElementById('soil-analysis-section').style.backgroundImage = 'url(' + imageUrl + ')';
+        const links = document.querySelectorAll('#soil-subnav-links li');
+        links.forEach(link => link.classList.remove('active'));
+        element.classList.add('active');
+      }
+    </script>
   </section>
 
   <!-- Testimonial -->
@@ -653,12 +655,12 @@
           <h2>and Smart Planting Solutions</h2>
         </div>
         <div class="test-arrows">
-          <button class="arrow-btn" style="background: var(--primary); color: white; border: none;">&lt;</button>
-          <button class="arrow-btn" style="background: var(--primary); color: white; border: none;">&gt;</button>
+          <button class="arrow-btn" style="background: var(--primary); color: white; border: none;" onclick="scrollInsights(-1)">&lt;</button>
+          <button class="arrow-btn" style="background: var(--primary); color: white; border: none;" onclick="scrollInsights(1)">&gt;</button>
         </div>
       </div>
 
-      <div class="insights-grid fade-in">
+      <div class="insights-grid fade-in" id="insights-scroll-container">
         <div class="insight-card active">
           <img src="assets/desert_trees_1777629893015.png" alt="Plantation & Desert Greening">
           <div class="insight-overlay">
@@ -686,8 +688,33 @@
             <span class="insight-desc">Read more -></span>
           </div>
         </div>
+
+        <div class="insight-card">
+          <img src="assets/desert_trees_1777629893015.png" alt="Nurseries & Planting Supply">
+          <div class="insight-overlay">
+            <span class="insight-tag">Nurseries & Planting Supply</span>
+            <h3 class="insight-title">Premium nursery infrastructure and expert planting supply.</h3>
+            <span class="insight-desc">Read more -></span>
+          </div>
+        </div>
+
+        <div class="insight-card">
+          <img src="assets/urban_green_1777629876272.png" alt="Vertical Farming & CEA">
+          <div class="insight-overlay">
+            <span class="insight-tag">Vertical Farming & CEA</span>
+            <h3 class="insight-title">Smart controlled-environment agriculture for year-round yield.</h3>
+            <span class="insight-desc">Read more -></span>
+          </div>
+        </div>
       </div>
     </div>
+    <script>
+      function scrollInsights(dir) {
+        const container = document.getElementById('insights-scroll-container');
+        const cardWidth = container.querySelector('.insight-card').offsetWidth + 30;
+        container.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+      }
+    </script>
   </section>
 
   <!-- Marquee -->

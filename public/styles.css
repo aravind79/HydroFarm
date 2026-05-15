@@ -260,14 +260,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* TRUSTED PARTNER */
 .trusted-partner {
-  padding: 100px 0;
+  padding: 60px 0;
   background-color: var(--white);
 }
 
 .tp-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: 60px;
   align-items: center;
 }
 
@@ -275,7 +275,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   border-radius: 20px;
   overflow: hidden;
-  height: 600px;
+  height: 400px;
 }
 
 .tp-image-container img {
@@ -286,27 +286,27 @@ h1, h2, h3, h4, h5, h6 {
 
 .tp-overlay {
   position: absolute;
-  bottom: 40px;
-  left: 40px;
+  bottom: 30px;
+  left: 30px;
   color: var(--white);
 }
 
 .tp-overlay h4 {
-  font-size: 33px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 8px;
 }
 
 .tp-overlay p {
-  font-size: 19px;
+  font-size: 16px;
   opacity: 0.8;
   max-width: 300px;
 }
 
 .tp-content h2 {
-  font-size: 65px;
+  font-size: 42px;
   font-weight: 500;
-  line-height: 1.1;
-  margin-bottom: 30px;
+  line-height: 1.2;
+  margin-bottom: 20px;
 }
 
 .tp-content h2 span {
@@ -314,9 +314,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .tp-content p {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--text-light);
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   max-width: 450px;
 }
 
@@ -423,17 +423,17 @@ h1, h2, h3, h4, h5, h6 {
 
 /* INNOVATION DASHBOARD */
 .innovation {
-  padding: 80px 0;
+  padding: 50px 0;
   background-color: var(--bg-light);
 }
 
 .innovation-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 .innovation-header h2 {
-  font-size: 49px;
+  font-size: 40px;
   font-weight: 500;
 }
 
@@ -442,9 +442,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .innovation-header p {
-  font-size: 19px;
+  font-size: 18px;
   color: var(--text-light);
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .innovation-actions {
@@ -470,16 +470,16 @@ h1, h2, h3, h4, h5, h6 {
 .dash-card {
   background-color: var(--white);
   border-radius: 16px;
-  padding: 24px;
+  padding: 20px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
 
 .card-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-light);
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 /* Specific Dashboard Widgets */
@@ -639,13 +639,14 @@ h1, h2, h3, h4, h5, h6 {
 /* SOIL & PLANT ANALYSIS */
 .soil-analysis {
   position: relative;
-  height: 80vh;
-  background-image: url('assets/hero_bg_1777629838865.png'); /* Using a dark landscape placeholder */
+  height: 75vh;
+  background-image: url('assets/hero_bg_1777629838865.png');
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: flex-end;
   color: var(--white);
+  transition: background-image 0.5s ease;
 }
 
 .soil-analysis::before {
@@ -775,26 +776,41 @@ h1, h2, h3, h4, h5, h6 {
 
 /* INSIGHTS */
 .insights {
-  padding: 80px 0;
+  padding: 70px 0;
   background-color: var(--white);
 }
 
 .insights-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 60px;
+  align-items: center;
+  margin-bottom: 40px;
 }
 
 .insights-header h2 {
-  font-size: 57px;
+  font-size: 40px;
   font-weight: 500;
 }
 
 .insights-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.insights-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.insights-grid .insight-card {
+  flex: 0 0 calc(33% - 16px);
+  min-width: 280px;
+  scroll-snap-align: start;
 }
 
 .insight-card {
