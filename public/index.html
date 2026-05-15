@@ -246,12 +246,20 @@
                    const clampedFade = Math.min(Math.max(fadeProgress, 0), 1);
                    canvas.style.opacity = 1 - clampedFade;
                    if (heroSection) {
+                     heroSection.style.position = 'fixed';
+                     heroSection.style.top = '0';
+                     heroSection.style.left = '0';
+                     heroSection.style.width = '100vw';
+                     heroSection.style.height = '100vh';
+                     heroSection.style.zIndex = '0';
                      heroSection.style.visibility = 'visible';
                      heroSection.style.opacity = clampedFade;
                    }
                 } else {
                    canvas.style.opacity = '1';
                    if (heroSection) {
+                     heroSection.style.position = 'relative';
+                     heroSection.style.height = 'auto';
                      heroSection.style.opacity = '0';
                      heroSection.style.visibility = 'hidden';
                    }
@@ -316,6 +324,8 @@
             
             const heroSection = document.getElementById('hero-section');
             if (heroSection) {
+              heroSection.style.position = 'relative';
+              heroSection.style.height = 'auto';
               heroSection.style.opacity = '1';
               heroSection.style.visibility = 'visible';
             }
@@ -348,16 +358,22 @@
 
           // MOBILE TOUCH
           let touchStartY = 0;
-          canvas.addEventListener('touchstart', (e) => { 
+          window.addEventListener('touchstart', (e) => { 
             touchStartY = e.touches[0].clientY; 
-          }, { passive: false });
+          }, { passive: true });
           
-          canvas.addEventListener('touchmove', (e) => {
-            if (targetFrame >= 249) return;
-            e.preventDefault();
-            const delta = (touchStartY - e.touches[0].clientY) * 2;
-            touchStartY = e.touches[0].clientY;
-            targetFrame = Math.min(Math.max(targetFrame + Math.floor(delta / 5), 0), 249);
+          window.addEventListener('touchmove', (e) => {
+            if (document.getElementById('hero-scroll-container').style.display !== 'none') {
+              if (targetFrame >= 249 && window.pageYOffset > 5) return;
+              
+              if (targetFrame < 249 && e.cancelable) {
+                e.preventDefault();
+              }
+              
+              const delta = (touchStartY - e.touches[0].clientY) * 2;
+              touchStartY = e.touches[0].clientY;
+              targetFrame = Math.max(0, Math.min(249, targetFrame + Math.floor(delta / 5)));
+            }
           }, { passive: false });
           
           window.addEventListener("wheel", (e) => {
