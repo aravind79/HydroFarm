@@ -20,7 +20,7 @@
   </div>
 
   <!-- Navigation -->
-  <nav id="navbar" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: transparent; box-sizing: border-box; font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+  <nav id="navbar" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: transparent; box-sizing: border-box; font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; transform: translateY(-100%); transition: transform 0.8s ease;">
     
     <!-- Logo -->
     <a href="#" style="display: block; flex: 1;">
@@ -180,6 +180,8 @@
 
           // START SCROLL ANIMATION
           function startScrollAnimation() {
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
             document.getElementById('hero-scroll-container').style.display = 'block';
             canvas.style.opacity = '1';
             
@@ -237,6 +239,23 @@
                   overlay.style.boxShadow = boxShadow;
                   overlay.style.background = bgColor;
                 }
+                // Cinematic crossfade to hero section
+                const heroSection = document.getElementById('hero-section');
+                if (idx >= 240) {
+                   const fadeProgress = (idx - 240) / 10;
+                   const clampedFade = Math.min(Math.max(fadeProgress, 0), 1);
+                   canvas.style.opacity = 1 - clampedFade;
+                   if (heroSection) {
+                     heroSection.style.visibility = 'visible';
+                     heroSection.style.opacity = clampedFade;
+                   }
+                } else {
+                   canvas.style.opacity = '1';
+                   if (heroSection) {
+                     heroSection.style.opacity = '0';
+                     heroSection.style.visibility = 'hidden';
+                   }
+                }
                 
                 // Fix canvas position based on scroll end
                 if (idx >= 249) {
@@ -258,11 +277,35 @@
           function onAnimationComplete() {
             if (animationCompleteTriggered) return;
             animationCompleteTriggered = true;
-            canvas.style.position = 'absolute';
-            canvas.style.top = '0';
-            canvas.style.zIndex = '0';
+            
+            canvas.style.opacity = '0';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.display = 'none';
+            
+            const heroScrollContainer = document.getElementById('hero-scroll-container');
+            if (heroScrollContainer) {
+              heroScrollContainer.style.height = 'auto';
+              heroScrollContainer.style.position = 'relative';
+              
+              const heroSticky = document.getElementById('hero-sticky');
+              if (heroSticky) {
+                heroSticky.style.display = 'none';
+              }
+            }
+            
             document.body.style.overflow = 'auto';
             document.documentElement.style.overflow = 'auto';
+            
+            const heroSection = document.getElementById('hero-section');
+            if (heroSection) {
+              heroSection.style.opacity = '1';
+              heroSection.style.visibility = 'visible';
+            }
+            
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+              navbar.style.transform = 'translateY(0)';
+            }
           }
 
           // SCROLL DETECTION
@@ -310,6 +353,7 @@
     </div>
   </section>
 
+  <div id="hero-section" style="opacity: 0; visibility: hidden;">
   <!-- Stats Bar -->
   <section class="stats-bar">
     <div class="container stats-grid fade-in">
@@ -680,6 +724,7 @@
   <script type="text/javascript"
     src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <script src="app.js"></script>
+  </div>
 </body>
 
 </html>
