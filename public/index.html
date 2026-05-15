@@ -140,9 +140,9 @@
             const preloader = document.getElementById('preloader');
             preloader.style.transition = 'opacity 0.6s ease';
             preloader.style.opacity = '0';
+            startScrollAnimation();
             setTimeout(() => {
               preloader.style.display = 'none';
-              startScrollAnimation();
             }, 600);
           }
 
@@ -275,7 +275,7 @@
             const scrollContainer = document.getElementById('hero-scroll-container');
             if (scrollContainer && scrollContainer.style.display !== 'none') {
                const scrollTop = window.pageYOffset;
-               const maxScroll = scrollContainer.offsetHeight; // Use full height so animation ends when next section covers it
+               const maxScroll = scrollContainer.offsetHeight - window.innerHeight;
                if (maxScroll > 0) {
                  const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
                  targetFrame = Math.floor(progress * 249);
