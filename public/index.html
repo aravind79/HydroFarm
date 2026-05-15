@@ -263,6 +263,24 @@
                 } else {
                    canvas.style.position = 'fixed';
                    canvas.style.top = '0';
+                   canvas.style.display = 'block';
+                   canvas.style.pointerEvents = 'auto';
+                   
+                   const heroScrollContainer = document.getElementById('hero-scroll-container');
+                   if (heroScrollContainer) {
+                     heroScrollContainer.style.height = '800vh';
+                     heroScrollContainer.style.position = 'relative';
+                   }
+                   
+                   const heroSticky = document.getElementById('hero-sticky');
+                   if (heroSticky) heroSticky.style.display = 'block';
+                   
+                   document.body.style.overflow = 'hidden';
+                   document.documentElement.style.overflow = 'hidden';
+                   
+                   const navbar = document.getElementById('navbar');
+                   if (navbar) navbar.style.transform = 'translateY(-100%)';
+                   
                    animationCompleteTriggered = false;
                    const overlay = document.getElementById("hero-overlay");
                    if (overlay) overlay.style.position = 'fixed';
@@ -344,6 +362,7 @@
           
           window.addEventListener("wheel", (e) => {
             if (document.getElementById('hero-scroll-container').style.display !== 'none') {
+              if (targetFrame >= 249 && window.pageYOffset > 5) return;
               targetFrame += e.deltaY * 0.05;
               targetFrame = Math.max(0, Math.min(249, targetFrame));
             }
