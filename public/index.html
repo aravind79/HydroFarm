@@ -182,6 +182,7 @@
           function startScrollAnimation() {
             document.body.style.overflow = 'hidden';
             document.documentElement.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
             document.getElementById('hero-scroll-container').style.display = 'block';
             canvas.style.opacity = '1';
             
@@ -260,7 +261,7 @@
                    if (heroSection) {
                      heroSection.style.position = 'relative';
                      heroSection.style.height = 'auto';
-                     heroSection.style.marginTop = '0px';
+                     heroSection.style.paddingTop = '0px';
                      heroSection.style.opacity = '0';
                      heroSection.style.visibility = 'hidden';
                    }
@@ -286,6 +287,7 @@
                    
                    document.body.style.overflow = 'hidden';
                    document.documentElement.style.overflow = 'hidden';
+                   document.body.style.touchAction = 'none';
                    
                    const navbar = document.getElementById('navbar');
                    if (navbar) navbar.style.transform = 'translateY(-100%)';
@@ -322,12 +324,13 @@
             
             document.body.style.overflow = 'auto';
             document.documentElement.style.overflow = 'auto';
+            document.body.style.touchAction = 'auto';
             
             const heroSection = document.getElementById('hero-section');
             if (heroSection) {
               heroSection.style.position = 'relative';
               heroSection.style.height = 'auto';
-              heroSection.style.marginTop = '120px';
+              heroSection.style.paddingTop = '120px';
               heroSection.style.opacity = '1';
               heroSection.style.visibility = 'visible';
             }
@@ -368,15 +371,11 @@
             if (document.getElementById('hero-scroll-container').style.display !== 'none') {
               if (targetFrame >= 249 && window.pageYOffset > 5) return;
               
-              if (targetFrame < 249 && e.cancelable) {
-                e.preventDefault();
-              }
-              
               const delta = (touchStartY - e.touches[0].clientY) * 2;
               touchStartY = e.touches[0].clientY;
               targetFrame = Math.max(0, Math.min(249, targetFrame + Math.floor(delta / 5)));
             }
-          }, { passive: false });
+          }, { passive: true });
           
           window.addEventListener("wheel", (e) => {
             if (document.getElementById('hero-scroll-container').style.display !== 'none') {
