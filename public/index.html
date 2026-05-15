@@ -241,25 +241,26 @@
                 }
                 // Cinematic crossfade to hero section
                 const heroSection = document.getElementById('hero-section');
-                if (idx >= 240) {
+                if (idx >= 240 && idx < 249) {
                    const fadeProgress = (idx - 240) / 10;
                    const clampedFade = Math.min(Math.max(fadeProgress, 0), 1);
                    canvas.style.opacity = 1 - clampedFade;
                    if (heroSection) {
                      heroSection.style.position = 'fixed';
-                     heroSection.style.top = '0';
+                     heroSection.style.top = '120px';
                      heroSection.style.left = '0';
                      heroSection.style.width = '100vw';
-                     heroSection.style.height = '100vh';
+                     heroSection.style.height = 'calc(100vh - 120px)';
                      heroSection.style.zIndex = '0';
                      heroSection.style.visibility = 'visible';
                      heroSection.style.opacity = clampedFade;
                    }
-                } else {
+                } else if (idx < 240) {
                    canvas.style.opacity = '1';
                    if (heroSection) {
                      heroSection.style.position = 'relative';
                      heroSection.style.height = 'auto';
+                     heroSection.style.marginTop = '0px';
                      heroSection.style.opacity = '0';
                      heroSection.style.visibility = 'hidden';
                    }
@@ -326,6 +327,7 @@
             if (heroSection) {
               heroSection.style.position = 'relative';
               heroSection.style.height = 'auto';
+              heroSection.style.marginTop = '120px';
               heroSection.style.opacity = '1';
               heroSection.style.visibility = 'visible';
             }
