@@ -243,8 +243,7 @@
                    onAnimationComplete();
                 } else {
                    canvas.style.position = 'fixed';
-                   canvas.style.opacity = '1';
-                   canvas.style.display = 'block';
+                   canvas.style.top = '0';
                    animationCompleteTriggered = false;
                    const overlay = document.getElementById("hero-overlay");
                    if (overlay) overlay.style.position = 'fixed';
@@ -259,13 +258,9 @@
           function onAnimationComplete() {
             if (animationCompleteTriggered) return;
             animationCompleteTriggered = true;
-            canvas.style.transition = 'opacity 0.8s ease';
-            canvas.style.opacity = '0';
             canvas.style.position = 'absolute';
+            canvas.style.top = '0';
             canvas.style.zIndex = '0';
-            setTimeout(() => {
-              canvas.style.display = 'none';
-            }, 800);
             document.body.style.overflow = 'auto';
             document.documentElement.style.overflow = 'auto';
           }
