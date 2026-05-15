@@ -199,7 +199,7 @@
             animRunning = true;
             function loop() {
               currentFrame += (targetFrame - currentFrame) * 0.06;
-              const idx = Math.min(Math.floor(currentFrame), 249);
+              const idx = Math.min(Math.round(currentFrame), 249);
               if (frames[idx]) {
                 const ctx = canvas.getContext('2d');
                 
