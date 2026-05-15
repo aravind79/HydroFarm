@@ -93,7 +93,7 @@
   </script>
 
   <!-- Hero Section -->
-  <section id="hero-scroll-container" style="height: 800vh; position: relative; display: none;">
+  <section id="hero-scroll-container" style="height: 800vh; position: relative; display: none; background-color: #000;">
     <div id="hero-sticky" style="position: sticky; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; background: #000;">
       
       <!-- Desktop Canvas -->
@@ -243,6 +243,9 @@
                    onAnimationComplete();
                 } else {
                    canvas.style.position = 'fixed';
+                   canvas.style.opacity = '1';
+                   canvas.style.display = 'block';
+                   animationCompleteTriggered = false;
                    const overlay = document.getElementById("hero-overlay");
                    if (overlay) overlay.style.position = 'fixed';
                 }
@@ -272,7 +275,7 @@
             const scrollContainer = document.getElementById('hero-scroll-container');
             if (scrollContainer && scrollContainer.style.display !== 'none') {
                const scrollTop = window.pageYOffset;
-               const maxScroll = scrollContainer.offsetHeight - window.innerHeight;
+               const maxScroll = scrollContainer.offsetHeight; // Use full height so animation ends when next section covers it
                if (maxScroll > 0) {
                  const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
                  targetFrame = Math.floor(progress * 249);
